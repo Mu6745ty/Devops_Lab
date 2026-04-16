@@ -1,6 +1,7 @@
-push:
+name: Hello World Pipeline    ← REQUIRED
+on:                           ← REQUIRED (event trigger)
+  push:                       ← Your "push:" goes HERE (indented)
     branches: [ main ]
- 
 jobs:
   hello-job:
     runs-on: ubuntu-latest
