@@ -1,0 +1,83 @@
+# ─────────────────────────────────────────────
+# 1. Workflow name
+# ─────────────────────────────────────────────
+name: CI/CD Pipeline
+
+
+# ─────────────────────────────────────────────
+# 2. Trigger conditions
+# ─────────────────────────────────────────────
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+# ─────────────────────────────────────────────
+# 3. JOB 1: TEST (CI stage)
+# ─────────────────────────────────────────────
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 3.1 Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 3.2 Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # 3.3 Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 3.4 Run tests
+      - name: Run tests
+        run: python3 test_calculator.py
+
+
+# ─────────────────────────────────────────────
+# 4. JOB 2: BUILD & PUSH DOCKER IMAGE (CD stage)
+# ─────────────────────────────────────────────
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    # only run on main branch push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      # 4.1 Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 4.2 Login to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 4.3 Build Docker image (latest + commit tag)
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:${{ github.sha }} .
+
+      # 4.4 Push Docker image
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:${{ github.sha }}
+
+      # 4.5 Confirmation
+      - name: Confirm Push
+        run: echo "Image pushed to Docker Hub successfully!"
