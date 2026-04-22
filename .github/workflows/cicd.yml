@@ -69,14 +69,14 @@ jobs:
       # 4.3 Build Docker image (latest + commit tag)
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:latest .
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops_lab:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops_lab:${{ github.sha }} .
 
       # 4.4 Push Docker image
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-lab09:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops_lab:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops_lab:${{ github.sha }}
 
       # 4.5 Confirmation
       - name: Confirm Push
