@@ -1,1 +1,40 @@
-flask
+# Core UI Framework
+PyQt6==6.6.1
+PyQt6-Qt6==6.6.2
+PyQt6-sip==13.6.0
+
+# System Monitoring
+psutil==5.9.6
+GPUtil==1.4.0
+WMI==1.5.1
+pywin32==305
+
+# Database and ORM
+SQLAlchemy==2.0.23
+
+# Data Validation and Processing
+pydantic==2.5.0
+numpy==1.24.3
+
+# Reporting
+reportlab==4.0.9
+
+# Visualization
+matplotlib==3.8.2
+pyqtgraph==0.13.3
+
+# HTTP and API
+requests==2.31.0
+
+# Logging and Debugging
+loguru==0.7.2
+
+# Task Scheduling
+schedule==1.2.0
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Performance
+fastcache==1.1.3
